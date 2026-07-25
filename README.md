@@ -236,5 +236,4 @@ cpu16asm/
 - ถ้าหากต้องการ เอกสารตัวอย่าง Matsusembly ให้ไปขอทาง Pong B ในช่องทางใดก็ตาม
 - และ project นี้ทำเพื่อฝึก เป็น open source สามารถนำไปปรับใช้ได้ตามต้องการหรือศึกษา Code
 - นี้ไม่ใช้ Compiler จาก official และอาจมี bug ระบบ และ อาจไม่เปลี่ยนแปลงตาม opcode จริงในเอกสาร RealTime
-สรุปคือ นี้เป็น Matsusembler Compiler FanMade ซึ่งไม่ใช้ของทาง official และ update อ่านไม่ตาม เอกสาร RealTime และ อาจใช้งานได้บนหลายๆ os เช่น Windows 11/10 linux บ้างตัว เพราะเขียนด้วย java เป็นหลัก#   M a t s u s e m b l e r - f a n  
- 
+สรุปคือ นี้เป็น Matsusembler Compiler FanMade ซึ่งไม่ใช้ของทาง official และ update อ่านไม่ตาม เอกสาร RealTime และ อาจใช้งานได้บนหลายๆ os เช่น Windows 11/10 linux บ้างตัว เพราะเขียนด้วย java เป็นหลัก
