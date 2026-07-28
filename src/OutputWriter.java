@@ -5,20 +5,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
- * OutputWriter - เขียนผลลัพธ์ที่ assemble แล้ว ออกเป็น 3 รูปแบบ:
+ * OutputWriter - writes the assembled output in 3 formats:
  *
- *   BIN    - raw binary เดิม: 2 byte ต่อ word, big-endian, ไม่มี header
- *            เอาไปโหลดเข้า instruction memory / ROM ได้ตรง ๆ
+ *   BIN    - the original raw binary: 2 bytes per word, big-endian, no header
+ *            can be loaded directly into instruction memory / ROM
  *
- *   HEX    - text file, 1 word ต่อบรรทัด เป็นเลข hex 4 หลัก (16-bit)
- *            มี comment (// ...) ต่อท้ายบอก address + คำสั่งต้นทาง
- *            เข้ากันได้กับ Verilog $readmemh (บรรทัดที่มีแต่ // comment
- *            ไม่กระทบการ parse ของเครื่องมืออื่น)
+ *   HEX    - text file, 1 word per line as a 4-digit hex number (16-bit)
+ *            with a trailing comment (// ...) noting the address + source instruction
+ *            compatible with Verilog's $readmemh (lines containing only a //
+ *            comment don't interfere with other tools' parsing)
  *
- *   MANUAL - text file, 1 word ต่อบรรทัด เป็นเลขฐาน 2 เต็ม 16 บิต (0/1)
- *            พร้อม address และคำสั่งต้นทางกำกับไว้ให้ ใช้เวลาต้องโหลดโปรแกรม
- *            เข้า ROM/RAM ด้วยมือ (เช่น toggle switch หรือพิมพ์ทีละบรรทัด)
- *            เข้ากันได้กับ Verilog $readmemb ด้วยเหตุผลเดียวกับ HEX
+ *   MANUAL - text file, 1 word per line as full 16-bit binary (0/1),
+ *            annotated with the address and source instruction; used when
+ *            a program needs to be loaded into ROM/RAM by hand (e.g. toggling
+ *            switches, or typing it in line by line)
+ *            also compatible with Verilog's $readmemb for the same reason as HEX
  */
 class OutputWriter {
 
@@ -32,9 +33,9 @@ class OutputWriter {
                 case "manual": case "bin-text": case "bintext": return MANUAL;
                 default:
                     System.err.println("[Error] Unknown output format: '" + s
-                            + "' (ใช้ได้แค่ bin | hex | manual)");
+                            + "' (valid options: bin | hex | manual)");
                     System.exit(1);
-                    return BIN; // ไม่ถึงตรงนี้ แต่ javac ต้องการ return
+                    return BIN; // unreachable, but javac requires a return
             }
         }
     }
@@ -64,8 +65,8 @@ class OutputWriter {
 
         try (PrintWriter out = newTextWriter(path)) {
             out.println("// CPU16 program image - hex format, 1 word (16-bit) per line");
-            out.println("// รูปแบบ: <hex 4 หลัก>  // addr <hex> (<dec>)  <source line ถ้ามี>");
-            out.println("// เข้ากันได้กับ Verilog $readmemh (บรรทัด // ไม่รบกวนการ parse)");
+            out.println("// Format: <4-digit hex>  // addr <hex> (<dec>)  <source line if any>");
+            out.println("// Compatible with Verilog $readmemh (// lines don't interfere with parsing)");
             out.println();
             for (int i = 0; i < words.size(); i++) {
                 String hex = String.format("%04X", words.get(i));
@@ -85,9 +86,9 @@ class OutputWriter {
 
         try (PrintWriter out = newTextWriter(path)) {
             out.println("// CPU16 program image - MANUAL LOAD format");
-            out.println("// โหลดค่า 16 บิต (0/1) ต่อไปนี้เข้า ROM/RAM ทีละบรรทัด");
-            out.println("// เริ่มจาก address 0 ไล่ขึ้นไปตามลำดับที่เขียนไว้ด้านล่าง");
-            out.println("// รูปแบบ: <16 bit 0/1>  // addr <hex> (<dec>)  <source line ถ้ามี>");
+            out.println("// Load the following 16-bit values (0/1) into ROM/RAM one line at a time");
+            out.println("// Starting from address 0, in the order listed below");
+            out.println("// Format: <16-bit 0/1>  // addr <hex> (<dec>)  <source line if any>");
             out.println();
             for (int i = 0; i < words.size(); i++) {
                 String bin = toBinaryString16(words.get(i));
@@ -96,7 +97,7 @@ class OutputWriter {
                         bin, i, i, note.isEmpty() ? "" : "  " + note);
             }
             out.println();
-            out.println("// จบไฟล์ - รวม " + words.size() + " word(s)");
+            out.println("// End of file - " + words.size() + " word(s) total");
         } catch (IOException e) {
             fail(e);
         }

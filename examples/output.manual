@@ -1,0 +1,53 @@
+// CPU16 program image - MANUAL LOAD format
+// Load the following 16-bit values (0/1) into ROM/RAM one line at a time
+// Starting from address 0, in the order listed below
+// Format: <16-bit 0/1>  // addr <hex> (<dec>)  <source line if any>
+
+0000000000000000  // addr 0x0000 (0)  jmp target
+0000000000101101  // addr 0x0001 (1)
+0000000000100001  // addr 0x0002 (2)  js target
+0000000000101101  // addr 0x0003 (3)
+0000000000100000  // addr 0x0004 (4)  jns target
+0000000000101101  // addr 0x0005 (5)
+0000000001000010  // addr 0x0006 (6)  jv target
+0000000000101101  // addr 0x0007 (7)
+0000000001000000  // addr 0x0008 (8)  jnv target
+0000000000101101  // addr 0x0009 (9)
+0000000010000100  // addr 0x000A (10)  jc target
+0000000000101101  // addr 0x000B (11)
+0000000010000000  // addr 0x000C (12)  jnc target
+0000000000101101  // addr 0x000D (13)
+0000000100001000  // addr 0x000E (14)  jn target
+0000000000101101  // addr 0x000F (15)
+0000000100000000  // addr 0x0010 (16)  jnn target
+0000000000101101  // addr 0x0011 (17)
+0000001000010000  // addr 0x0012 (18)  jz target
+0000000000101101  // addr 0x0013 (19)
+0000001000000000  // addr 0x0014 (20)  jnz target
+0000000000101101  // addr 0x0015 (21)
+0001000000000001  // addr 0x0016 (22)  and r0, r1
+0001000100000001  // addr 0x0017 (23)  or r0, r1
+0001001100000001  // addr 0x0018 (24)  add r0, r1
+0001010000000001  // addr 0x0019 (25)  sub r0, r1
+0001010100000001  // addr 0x001A (26)  xor r0, r1
+0001101000000000  // addr 0x001B (27)  not r0
+0010000000000001  // addr 0x001C (28)  cpy r0, r1
+0010100000000000  // addr 0x001D (29)  lim r0, 1234
+0000010011010010  // addr 0x001E (30)
+0011001100000000  // addr 0x001F (31)  inc r0
+0011010000000000  // addr 0x0020 (32)  dec r0
+0011110000001111  // addr 0x0021 (33)  pop r0
+0100001100001111  // addr 0x0022 (34)  push r0
+0100101100001111  // addr 0x0023 (35)  call r0
+0101010000001111  // addr 0x0024 (36)  ret
+0101100000000000  // addr 0x0025 (37)  store r0, 100
+0000000001100100  // addr 0x0026 (38)
+0110000000000000  // addr 0x0027 (39)  load r0, 100
+0000000001100100  // addr 0x0028 (40)
+0110100000000000  // addr 0x0029 (41)  nop
+0111000000000001  // addr 0x002A (42)  out r0, r1
+0111100000000001  // addr 0x002B (43)  in r0, r1
+1000010000000001  // addr 0x002C (44)  cmp r0, r1
+0110100000000000  // addr 0x002D (45)  nop
+
+// End of file - 46 word(s) total

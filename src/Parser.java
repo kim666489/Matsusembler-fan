@@ -262,9 +262,12 @@ class Parser {
             }
             case "lim": {
                 // LIM Ra, value  (Ra = value, 2 words)
+                // value รับได้ทั้งเลขตรง ๆ และชื่อ label (เช่น "LIM r3, print_result"
+                // เพื่อเตรียม address ไว้ใช้กับ CALL/JMP แบบ register-indirect
+                // ตามที่ README อธิบายไว้)
                 requireArgs(line, 2, op);
                 int ra = regId(line[1]);
-                int value = intVal(line[2]);
+                int value = resolveAddrOrLiteral(line[2]);
                 emitWord(0x2800 | (ra << 4));
                 emitWord(value & 0xFFFF);
                 break;

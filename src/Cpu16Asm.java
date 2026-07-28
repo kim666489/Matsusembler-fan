@@ -1,13 +1,13 @@
 /**
- * Cpu16Asm - จุดเข้าโปรแกรมของ assembler
+ * Cpu16Asm - Program entry point for the assembler
  *
  * Usage:
  *   java Cpu16Asm <source.asm> <output> [--format=bin|hex|manual] [--debug]
  *
- *   --format=bin     (default) raw binary, big-endian, 2 byte/word, ไม่มี header
- *   --format=hex     text file, 1 word ต่อบรรทัด เป็น hex 4 หลัก พร้อม comment
- *   --format=manual  text file, 1 word ต่อบรรทัด เป็นเลขฐาน 2 เต็ม 16 บิต (0/1)
- *                     พร้อม address/comment กำกับ ไว้ใช้โหลดโปรแกรมด้วยมือ
+ *   --format=bin     (default) raw binary, big-endian, 2 bytes/word, no header
+ *   --format=hex     text file, 1 word per line as 4-digit hex, with comments
+ *   --format=manual  text file, 1 word per line as full 16-bit binary (0/1),
+ *                     with address/comment annotations, for manual program loading
  */
 public class Cpu16Asm {
     public static boolean debug = false;
@@ -31,7 +31,7 @@ public class Cpu16Asm {
                 format = OutputWriter.Format.fromString(arg.substring("--format=".length()));
             } else if (arg.equals("--format")) {
                 if (i + 1 >= args.length) {
-                    System.err.println("[Error] --format ต้องตามด้วยค่า bin | hex | manual");
+                    System.err.println("[Error] --format must be followed by a value: bin | hex | manual");
                     System.exit(1);
                 }
                 format = OutputWriter.Format.fromString(args[++i]);
@@ -64,8 +64,8 @@ public class Cpu16Asm {
 
     private static void printUsage() {
         System.err.println("Usage: java Cpu16Asm <source.asm> <output> [--format=bin|hex|manual] [--debug]");
-        System.err.println("  bin     raw binary, big-endian, 2 byte/word (default)");
-        System.err.println("  hex     text, 1 word/บรรทัด เป็น hex 4 หลัก + comment");
-        System.err.println("  manual  text, 1 word/บรรทัด เป็นเลขฐาน 2 16-bit (0/1) + comment สำหรับโหลดด้วยมือ");
+        System.err.println("  bin     raw binary, big-endian, 2 bytes/word (default)");
+        System.err.println("  hex     text, 1 word/line as 4-digit hex + comment");
+        System.err.println("  manual  text, 1 word/line as 16-bit binary (0/1) + comment, for manual loading");
     }
 }
